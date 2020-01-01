@@ -1,10 +1,10 @@
 import styles from './index.css';
-import SiderDemo from './BaseLayout'
+
 function BasicLayout(props) {
   return (
     <div className={styles.normal}>
-      <h1 className={styles.title}>Yay! Welcome to umi!</h1>
-      <SiderDemo></SiderDemo>
+      {/* <h1 className={styles.title}>Yay! Welcome to umi!</h1> */}
+     
       {props.children}
     </div>
   );
