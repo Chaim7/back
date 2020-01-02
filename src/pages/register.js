@@ -3,8 +3,9 @@ import React from 'react'
 import {
     Row, Col, Form, Icon, Input, Button,message
 } from 'antd'
-import {signIn} from '@/api/userApi'
-class login extends React.PureComponent {
+import {signUp} from '@/api/userApi'
+console.log(signUp)
+class resigter extends React.PureComponent {
     
     render () {
         const { getFieldDecorator } = this.props.form
@@ -36,7 +37,7 @@ class login extends React.PureComponent {
                 </Form.Item>
                 <Form.Item>
                 <Button type="primary" htmlType="submit" className={styles.loginformbutton}>
-                Log in
+                Reigster
               </Button>
                 </Form.Item>
             </Form>
@@ -49,18 +50,21 @@ class login extends React.PureComponent {
         e.preventDefault()
         this.props.form.validateFields((err,values)=>{
             if(!err){
-              signIn(values).then(response => {
-                const {data} = response
-                if(data.code===0){
-                    message.success('正确',3,()=>{
-                        this.props.history.push('/')
-                    })
-                }else{
-                    message.error(data.msg)
-                }
-            })
+                
+                signUp(values).then(response => {
+                    const {data} = response
+                    console.log(data)
+                    console.log(values)
+                    if(data.code===0){
+                        message.success('正确',3,()=>{
+                            this.props.history.push('/login')
+                        })
+                    }else{
+                        message.error(data.msg)
+                    }
+                })
             }
         })
     }
 }
-export default Form.create()(login)
+export default Form.create()(resigter)

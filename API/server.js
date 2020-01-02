@@ -5,38 +5,39 @@ const routes = jsonServer.router('./db.json')
 const bcryptjs= require('bcryptjs')
 const server = express()
 const Axios = require('axios')
-
+server.use((req,res,next)=>{
+    res.set("Access-Control-Allow-Origin","*")
+    next()
+})
 server.use(express.json())
 server.use(express.urlencoded({extended:true}))
 
 Axios.defaults.baseURL='http://localhost:9090'
 
-server.post('/sign-up',async (req,res)=>{
-const {data} = await Axios.post('/users',{
-    ...req.body,
-    password:await bcryptjs.hash(req.body.password,10)
-})
-const response = await Axios.get('/users',{
-    params:{
-        username:req.body.username
-    }
-})
-if(response.data.length>0){
-    res.send({
-        code:-1,
-        msg:"账号已注册"
+server.post('/sign-up',async(req,res)=>{
+    const response = await Axios.get ('/users',{
+        params:{username:req.body.username}
     })
-    return
-}
-if(data.length>0){
+    if(response.data.length>0){
+        res.send({
+            code:-1,
+            msg:"账号已注册"
+        })
+        return
+    }
+
+
+    const {data} = await Axios.post('/users',{
+        ...req.body,
+        password:await bcryptjs.hash(req.body.password,12)
+    })
+   
     res.send({
         code:0,
-        msg:"注册成功",
-        data
+        msg:"注册成功"
     })
-}
-
 })
+
 server.post('/sign-in',async (req,res)=>{
     const {username,password} = req.body
     const {data} = await Axios.get('/users',{
